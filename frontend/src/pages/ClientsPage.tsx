@@ -3,134 +3,10 @@ import ClientList from "../components/ClientList";
 import EditClientModal from "../components/EditClientModal";
 import RemoveClientModal from "../components/RemoveClientModal";
 import Pagination from "../components/Pagination";
-
-const mockClients = [
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Carlos", salary: "R$ 4.500,00", company: "R$ 150.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Carlos", salary: "R$ 4.500,00", company: "R$ 150.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Carlos", salary: "R$ 4.500,00", company: "R$ 150.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Carlos", salary: "R$ 4.500,00", company: "R$ 150.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Carlos", salary: "R$ 4.500,00", company: "R$ 150.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Carlos", salary: "R$ 4.500,00", company: "R$ 150.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Carlos", salary: "R$ 4.500,00", company: "R$ 150.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Carlos", salary: "R$ 4.500,00", company: "R$ 150.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Carlos", salary: "R$ 4.500,00", company: "R$ 150.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Carlos", salary: "R$ 4.500,00", company: "R$ 150.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Carlos", salary: "R$ 4.500,00", company: "R$ 150.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Carlos", salary: "R$ 4.500,00", company: "R$ 150.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Carlos", salary: "R$ 4.500,00", company: "R$ 150.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Carlos", salary: "R$ 4.500,00", company: "R$ 150.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Carlos", salary: "R$ 4.500,00", company: "R$ 150.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Carlos", salary: "R$ 4.500,00", company: "R$ 150.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-];
+import { useClients } from "../context/ClientsContext";
 
 export const ClientsPage: React.FC = () => {
-  const [clients, setClients] = useState(mockClients);
+  const { clients, addClient, updateClient, removeClient } = useClients(); // Use o contexto
   const [isEditing, setIsEditing] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
   const [isRemoving, setIsRemoving] = useState(false);
@@ -158,12 +34,9 @@ export const ClientsPage: React.FC = () => {
     company: string;
   }) => {
     if (selectedClientIndex !== null) {
-      const updatedClients = clients.map((client, i) =>
-        i === selectedClientIndex ? updatedClient : client
-      );
-      setClients(updatedClients);
+      updateClient(selectedClientIndex, updatedClient);
     } else {
-      setClients([...clients, updatedClient]);
+      addClient(updatedClient);
     }
     setIsEditing(false);
     setIsAdding(false);
@@ -176,7 +49,7 @@ export const ClientsPage: React.FC = () => {
 
   const confirmRemove = () => {
     if (selectedClientIndex !== null) {
-      setClients(clients.filter((_, i) => i !== selectedClientIndex));
+      removeClient(selectedClientIndex);
     }
     setIsRemoving(false);
   };
@@ -254,7 +127,7 @@ export const ClientsPage: React.FC = () => {
 
       {isRemoving && selectedClientIndex !== null && (
         <RemoveClientModal
-          client={clients[selectedClientIndex]}
+          client={clients[selectedClientIndex!]}
           onClose={() => setIsRemoving(false)}
           onConfirm={confirmRemove}
         />
