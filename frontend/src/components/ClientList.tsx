@@ -30,3 +30,5 @@ export const ClientList: React.FC<ClientListProps> = ({
     </div>
   );
 };
+
+export default ClientList;

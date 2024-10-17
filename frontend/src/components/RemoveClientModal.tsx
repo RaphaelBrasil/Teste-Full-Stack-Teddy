@@ -37,3 +37,5 @@ export const RemoveClientModal: React.FC<RemoveClientModalProps> = ({
     </div>
   );
 };
+
+export default RemoveClientModal;

@@ -1,11 +1,12 @@
 import React from "react";
 import {
-  IconX,
   IconLayoutGridFilled,
   IconHomeFilled,
   IconUserFilled,
+  IconArrowLeft,
 } from "@tabler/icons-react";
-import { NavLink } from "react-router-dom"; // Import NavLink for routing
+import { NavLink } from "react-router-dom";
+import Logo from "./Logo";
 
 interface SidebarProps {
   isOpen: boolean;
@@ -18,23 +19,30 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
       <div
         className={`fixed top-0 left-0 h-full w-64 shadow-lg z-40 transform ${
           isOpen ? "translate-x-0" : "-translate-x-full"
-        } transition-transform duration-300 ease-in-out`}
+        } transition-transform duration-300 ease-in-out rounded-tr-lg`}
         style={{
           background:
-            "linear-gradient(to bottom, gray-800 0%, gray-800 128px, white 128px, white 100%)",
+            "linear-gradient(to bottom, #1F2937 0%, #1F2937 128px, white 128px, white 100%)",
         }}
       >
-        <div className="p-4 mt-52">
-          <button
-            onClick={onClose}
-            className="text-gray-500 hover:text-black mb-4"
-          >
-            <IconX size={24} />
-          </button>
+        <div className="relative flex items-center justify-center h-32">
+          <Logo onClick={onClose} />
+        </div>
+        {isOpen && (
+          <div className="absolute top-[104px] -right-6 w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center shadow-lg hover:bg-gray-900 transition-colors duration-200">
+            <button
+              onClick={onClose}
+              className="w-4 h-4 bg-white rounded-full flex items-center justify-center shadow-lg"
+            >
+              <IconArrowLeft className="text-gray-800" />
+            </button>
+          </div>
+        )}
+        <div className="p-4 ">
           <ul>
             <li className="mb-2">
               <NavLink
-                to="/home" // Link to Home page
+                to="/home"
                 className={({ isActive }) =>
                   `text-gray-700 flex items-center ${
                     isActive ? "font-semibold text-orange-500" : ""
@@ -46,7 +54,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
             </li>
             <li className="mb-2">
               <NavLink
-                to="/" // Link to Clients page
+                to="/"
                 className={({ isActive }) =>
                   `text-gray-700 flex items-center ${
                     isActive ? "font-semibold text-orange-500" : ""
@@ -58,7 +66,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
             </li>
             <li className="mb-2">
               <NavLink
-                to="/products" // Link to Products page
+                to="/products"
                 className={({ isActive }) =>
                   `text-gray-700 flex items-center ${
                     isActive ? "font-semibold text-orange-500" : ""

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate, NavLink } from "react-router-dom"; // Import NavLink
+import { useNavigate, NavLink } from "react-router-dom";
 import { IconMenu2 } from "@tabler/icons-react";
 import { Sidebar } from "./Sidebar";
 import Logo from "./Logo";
@@ -18,8 +18,8 @@ export const Header: React.FC = () => {
 
   return (
     <>
-      <header className="fixed top-0 left-0 right-0 h-24 w-full flex justify-between items-center px-8 shadow-md bg-white">
-        <div className="flex items-center space-x-8">
+      <header className="fixed top-0 left-0 right-0 h-24 w-full flex justify-between items-center px-4 sm:px-8 shadow-md bg-white">
+        <div className="flex items-center space-x-4 sm:space-x-8">
           <button
             onClick={toggleSidebar}
             className="text-gray-500 hover:text-black"
@@ -28,9 +28,9 @@ export const Header: React.FC = () => {
           </button>
           <Logo onClick={() => navigate("/")} />
         </div>
-        <nav className="flex space-x-8">
+        <nav className="hidden md:flex space-x-8">
           <NavLink
-            to="/" // Navigate to the clients page
+            to="/"
             className={({ isActive }) =>
               `cursor-pointer ${
                 isActive ? "text-orange-500 font-semibold" : "text-gray-500"
@@ -40,7 +40,7 @@ export const Header: React.FC = () => {
             Clientes
           </NavLink>
           <NavLink
-            to="/selected-clients" // Navigate to the selected clients page
+            to="/selected-clients"
             className={({ isActive }) =>
               `cursor-pointer ${
                 isActive ? "text-orange-500 font-semibold" : "text-gray-500"
@@ -50,7 +50,7 @@ export const Header: React.FC = () => {
             Clientes selecionados
           </NavLink>
           <NavLink
-            to="/welcome" // Navigate to the selected clients page
+            to="/welcome"
             className={({ isActive }) =>
               `cursor-pointer ${
                 isActive ? "text-orange-500 font-semibold" : "text-gray-500"
@@ -60,10 +60,11 @@ export const Header: React.FC = () => {
             Sair
           </NavLink>
         </nav>
-        <div className="text-gray-700">
+        <div className="hidden md:block text-gray-700">
           Olá, <span className="font-semibold">Usuário!</span>
         </div>
       </header>
+
       <Sidebar isOpen={isSidebarOpen} onClose={closeSidebar} />
     </>
   );

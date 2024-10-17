@@ -97,3 +97,5 @@ export const EditClientModal: React.FC<EditClientModalProps> = ({
     </div>
   );
 };
+
+export default EditClientModal;
