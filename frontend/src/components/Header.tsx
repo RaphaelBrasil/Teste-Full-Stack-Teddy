@@ -3,10 +3,12 @@ import { useNavigate, NavLink } from "react-router-dom";
 import { IconMenu2 } from "@tabler/icons-react";
 import { Sidebar } from "./Sidebar";
 import Logo from "./Logo";
+import { useUser } from "../context/UserContext";
 
 export const Header: React.FC = () => {
   const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const { name } = useUser();
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -61,7 +63,8 @@ export const Header: React.FC = () => {
           </NavLink>
         </nav>
         <div className="hidden md:block text-gray-700">
-          Olá, <span className="font-semibold">Usuário!</span>
+          Olá, <span className="font-semibold">{name || "Usuário!"}</span>{" "}
+          {/* Use o nome do contexto ou um padrão */}
         </div>
       </header>
 

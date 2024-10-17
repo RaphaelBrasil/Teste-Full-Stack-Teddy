@@ -4,7 +4,9 @@ import ClientsPage from "./pages/ClientsPage";
 import SelectedClientsPage from "./pages/SelectedClientsPage";
 import WelcomePage from "./pages/WelcomePage";
 import Layout from "./components/Layout";
-import { ClientsProvider } from "./context/ClientsContext"; // Importe o ClientsProvider
+import { ClientsProvider } from "./context/ClientsContext";
+import { SelectedClientsProvider } from "./context/SelectedClientsContext";
+import { UserProvider } from "./context/UserContext";
 
 const App: React.FC = () => {
   const location = useLocation();
@@ -13,25 +15,27 @@ const App: React.FC = () => {
   const isNoLayoutRoute = noLayoutRoutes.includes(location.pathname);
 
   return (
-    <>
-      <ClientsProvider>
-        {!isNoLayoutRoute ? (
-          <Layout>
+    <UserProvider>
+      <SelectedClientsProvider>
+        <ClientsProvider>
+          {!isNoLayoutRoute ? (
+            <Layout>
+              <Routes>
+                <Route path="/" element={<ClientsPage />} />
+                <Route
+                  path="/selected-clients"
+                  element={<SelectedClientsPage />}
+                />
+              </Routes>
+            </Layout>
+          ) : (
             <Routes>
-              <Route path="/" element={<ClientsPage />} />
-              <Route
-                path="/selected-clients"
-                element={<SelectedClientsPage />}
-              />
+              <Route path="/welcome" element={<WelcomePage />} />
             </Routes>
-          </Layout>
-        ) : (
-          <Routes>
-            <Route path="/welcome" element={<WelcomePage />} />
-          </Routes>
-        )}
-      </ClientsProvider>
-    </>
+          )}
+        </ClientsProvider>
+      </SelectedClientsProvider>
+    </UserProvider>
   );
 };
 

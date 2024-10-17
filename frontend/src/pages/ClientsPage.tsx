@@ -4,9 +4,19 @@ import EditClientModal from "../components/EditClientModal";
 import RemoveClientModal from "../components/RemoveClientModal";
 import Pagination from "../components/Pagination";
 import { useClients } from "../context/ClientsContext";
+import { useSelectedClients } from "../context/SelectedClientsContext";
+
+interface Client {
+  name: string;
+  salary: string;
+  company: string;
+}
 
 export const ClientsPage: React.FC = () => {
-  const { clients, addClient, updateClient, removeClient } = useClients(); // Use o contexto
+  const { clients, addClient, updateClient, removeClient } = useClients();
+  const { selectedClients, addSelectedClient, removeSelectedClient } =
+    useSelectedClients();
+
   const [isEditing, setIsEditing] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
   const [isRemoving, setIsRemoving] = useState(false);
@@ -28,11 +38,7 @@ export const ClientsPage: React.FC = () => {
     setIsEditing(true);
   };
 
-  const handleSave = (updatedClient: {
-    name: string;
-    salary: string;
-    company: string;
-  }) => {
+  const handleSave = (updatedClient: Client) => {
     if (selectedClientIndex !== null) {
       updateClient(selectedClientIndex, updatedClient);
     } else {
@@ -58,6 +64,18 @@ export const ClientsPage: React.FC = () => {
     setIsAdding(true);
   };
 
+  const handleSelectClient = (client: Client) => {
+    if (
+      selectedClients.some(
+        (selectedClient) => selectedClient.name === client.name
+      )
+    ) {
+      removeSelectedClient(client);
+    } else {
+      addSelectedClient(client);
+    }
+  };
+
   const handleClientsPerPageChange = (
     e: React.ChangeEvent<HTMLSelectElement>
   ) => {
@@ -80,7 +98,7 @@ export const ClientsPage: React.FC = () => {
             id="clientsPerPage"
             value={clientsPerPage}
             onChange={handleClientsPerPageChange}
-            className="text-md md:text-md border rounded p-1"
+            className="text-md md:text-md border rounded p-1 bg-transparent"
           >
             <option value={16}>16</option>
             <option value={32}>32</option>
@@ -93,6 +111,8 @@ export const ClientsPage: React.FC = () => {
         clients={currentClients}
         onEdit={handleEdit}
         onRemove={handleRemove}
+        onSelect={handleSelectClient}
+        selectedClients={selectedClients}
       />
 
       <div className="flex justify-center mt-4">

@@ -5,7 +5,7 @@ interface ClientCardProps {
   name: string;
   salary: string;
   company: string;
-  onAdd: () => void;
+  onSelect: () => void;
   onEdit: () => void;
   onRemove: () => void;
 }
@@ -14,7 +14,7 @@ export const ClientCard: React.FC<ClientCardProps> = ({
   name,
   salary,
   company,
-  onAdd,
+  onSelect,
   onEdit,
   onRemove,
 }) => {
@@ -25,7 +25,7 @@ export const ClientCard: React.FC<ClientCardProps> = ({
       <p className="text-center">Empresa: {company}</p>
 
       <div className="flex justify-between mt-4">
-        <button className="text-gray-500 hover:text-black" onClick={onAdd}>
+        <button className="text-gray-500 hover:text-black" onClick={onSelect}>
           <IconPlus size={24} />
         </button>
         <button
