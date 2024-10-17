@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { ClientList } from "../components/ClientList";
 import { EditClientModal } from "../components/EditClientModal";
-import { Header } from "../components/Header";
+import { RemoveClientModal } from "../components/RemoveClientModal";
 
 const mockClients = [
   { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
-  { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
+  { name: "Carlos", salary: "R$ 4.500,00", company: "R$ 150.000,00" },
   { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
   { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
   { name: "Eduardo", salary: "R$ 3.500,00", company: "R$ 120.000,00" },
@@ -18,7 +18,8 @@ const mockClients = [
 export const ClientsPage: React.FC = () => {
   const [clients, setClients] = useState(mockClients);
   const [isEditing, setIsEditing] = useState(false);
-  const [isAdding, setIsAdding] = useState(false); // Novo estado para adicionar
+  const [isAdding, setIsAdding] = useState(false);
+  const [isRemoving, setIsRemoving] = useState(false);
   const [selectedClientIndex, setSelectedClientIndex] = useState<number | null>(
     null
   );
@@ -39,15 +40,22 @@ export const ClientsPage: React.FC = () => {
       );
       setClients(updatedClients);
     } else {
-      // Adiciona o novo cliente
       setClients([...clients, updatedClient]);
     }
     setIsEditing(false);
-    setIsAdding(false); // Fecha o modal de adição também
+    setIsAdding(false);
   };
 
   const handleRemove = (index: number) => {
-    setClients(clients.filter((_, i) => i !== index));
+    setSelectedClientIndex(index);
+    setIsRemoving(true);
+  };
+
+  const confirmRemove = () => {
+    if (selectedClientIndex !== null) {
+      setClients(clients.filter((_, i) => i !== selectedClientIndex));
+    }
+    setIsRemoving(false);
   };
 
   const handleAddClient = () => {
@@ -55,10 +63,8 @@ export const ClientsPage: React.FC = () => {
   };
 
   return (
-    <div className="p-6">
-      <Header />
-      <h1 className="text-xl font-bold mb-4 mt-24">Clientes encontrados:</h1>
-
+    <>
+      <h1 className="text-xl font-bold mb-4 ">Clientes encontrados:</h1>
       <ClientList
         clients={clients}
         onEdit={handleEdit}
@@ -66,7 +72,7 @@ export const ClientsPage: React.FC = () => {
       />
       <div className="flex justify-center mt-6">
         <button
-          className="bg-orange-500 text-white py-2 px-4 rounded hover:bg-orange-600"
+          className="w-full border border-orange-500 text-orange-500 py-2 px-4 rounded hover:bg-orange-500 hover:text-white transition-colors"
           onClick={handleAddClient}
         >
           Criar cliente
@@ -86,6 +92,15 @@ export const ClientsPage: React.FC = () => {
           onSave={handleSave}
         />
       )}
-    </div>
+      {isRemoving && selectedClientIndex !== null && (
+        <RemoveClientModal
+          client={clients[selectedClientIndex]}
+          onClose={() => setIsRemoving(false)}
+          onConfirm={confirmRemove}
+        />
+      )}
+    </>
   );
 };
+
+export default ClientsPage;

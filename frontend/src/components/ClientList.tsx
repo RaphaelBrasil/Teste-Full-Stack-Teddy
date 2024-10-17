@@ -22,6 +22,9 @@ export const ClientList: React.FC<ClientListProps> = ({
           company={client.company}
           onEdit={() => onEdit(index)}
           onRemove={() => onRemove(index)}
+          onAdd={function (): void {
+            throw new Error("Função não implementada");
+          }}
         />
       ))}
     </div>

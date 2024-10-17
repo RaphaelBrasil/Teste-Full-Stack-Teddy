@@ -1,8 +1,11 @@
 import React, { useState } from "react";
+import { useNavigate, NavLink } from "react-router-dom"; // Import NavLink
 import { IconMenu2 } from "@tabler/icons-react";
 import { Sidebar } from "./Sidebar";
+import Logo from "./Logo";
 
 export const Header: React.FC = () => {
+  const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const toggleSidebar = () => {
@@ -23,22 +26,39 @@ export const Header: React.FC = () => {
           >
             <IconMenu2 size={24} />
           </button>
-          <img
-            src="/logo.png"
-            alt="Teddy Open Finance"
-            className="h-auto w-24"
-          />
+          <Logo onClick={() => navigate("/")} />
         </div>
         <nav className="flex space-x-8">
-          <a href="#" className="text-orange-500 font-semibold">
+          <NavLink
+            to="/" // Navigate to the clients page
+            className={({ isActive }) =>
+              `cursor-pointer ${
+                isActive ? "text-orange-500 font-semibold" : "text-gray-500"
+              }`
+            }
+          >
             Clientes
-          </a>
-          <a href="#" className="text-gray-500">
+          </NavLink>
+          <NavLink
+            to="/selected-clients" // Navigate to the selected clients page
+            className={({ isActive }) =>
+              `cursor-pointer ${
+                isActive ? "text-orange-500 font-semibold" : "text-gray-500"
+              }`
+            }
+          >
             Clientes selecionados
-          </a>
-          <a href="#" className="text-gray-500">
+          </NavLink>
+          <NavLink
+            to="/welcome" // Navigate to the selected clients page
+            className={({ isActive }) =>
+              `cursor-pointer ${
+                isActive ? "text-orange-500 font-semibold" : "text-gray-500"
+              }`
+            }
+          >
             Sair
-          </a>
+          </NavLink>
         </nav>
         <div className="text-gray-700">
           Olá, <span className="font-semibold">Usuário!</span>
