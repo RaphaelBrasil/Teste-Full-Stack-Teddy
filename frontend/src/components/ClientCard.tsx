@@ -13,7 +13,6 @@ interface ClientCardProps {
   isSelected: boolean;
   isSelectPage: boolean;
   onToggleSelect?: () => void;
-  onDeselect?: () => void;
   onEdit?: () => void;
   onRemove?: () => void;
 }

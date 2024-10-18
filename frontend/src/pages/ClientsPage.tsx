@@ -1,17 +1,22 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ClientList from "../components/ClientList";
 import EditClientModal from "../components/EditClientModal";
 import RemoveClientModal from "../components/RemoveClientModal";
 import Pagination from "../components/Pagination";
 import { useClients } from "../context/ClientsContext";
-import { v4 as uuidv4 } from "uuid";
 import { Client } from "../types/clientTypes";
+import {
+  createClient,
+  updateClient,
+  deleteClient,
+  getClients,
+} from "../services/clientService";
 
 export const ClientsPage: React.FC = () => {
   const {
     clients,
     addClient,
-    updateClient,
+    updateClient: updateClientContext,
     removeClient,
     toggleClientSelection,
   } = useClients();
@@ -19,11 +24,29 @@ export const ClientsPage: React.FC = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
   const [isRemoving, setIsRemoving] = useState(false);
-  const [selectedClientIndex, setSelectedClientIndex] = useState<number | null>(
-    null
-  );
+  const [selectedClientId, setSelectedClientId] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [clientsPerPage, setClientsPerPage] = useState(16);
+
+  useEffect(() => {
+    const fetchClients = async () => {
+      try {
+        const initialClients = await getClients();
+        initialClients.forEach((client) => {
+          // Adiciona diretamente ao contexto se o cliente não existir
+          if (
+            !clients.some((existingClient) => existingClient.id === client.id)
+          ) {
+            addClient(client);
+          }
+        });
+      } catch (error) {
+        console.error("Error fetching clients:", error);
+      }
+    };
+
+    fetchClients();
+  }, [addClient, clients]); // Adicione 'clients' para garantir que a verificação ocorra corretamente
 
   const totalClients = clients.length;
   const totalPages = Math.ceil(totalClients / clientsPerPage);
@@ -32,34 +55,41 @@ export const ClientsPage: React.FC = () => {
     currentPage * clientsPerPage
   );
 
-  const handleEdit = (index: number) => {
-    setSelectedClientIndex(index);
+  const handleEdit = (id: string) => {
+    setSelectedClientId(id);
     setIsEditing(true);
   };
 
-  const handleSave = (updatedClient: Client) => {
-    if (selectedClientIndex !== null) {
-      const existingClient = clients[selectedClientIndex];
-      if (existingClient.id) {
-        updateClient(selectedClientIndex, updatedClient);
+  const handleSave = async (updatedClient: Client) => {
+    try {
+      if (selectedClientId) {
+        await updateClient(selectedClientId, updatedClient);
+        updateClientContext(selectedClientId, updatedClient);
+      } else {
+        const newClient = { ...updatedClient };
+        const createdClient = await createClient(newClient);
+        addClient(createdClient);
       }
-    } else {
-      const newClient = { ...updatedClient, id: uuidv4(), isSelected: false };
-      addClient(newClient);
+    } catch (error) {
+      console.error("Error saving client:", error);
     }
-
     setIsEditing(false);
     setIsAdding(false);
   };
 
-  const handleRemove = (index: number) => {
-    setSelectedClientIndex(index);
+  const handleRemove = (id: string) => {
+    setSelectedClientId(id);
     setIsRemoving(true);
   };
 
-  const confirmRemove = () => {
-    if (selectedClientIndex !== null) {
-      removeClient(selectedClientIndex);
+  const confirmRemove = async () => {
+    if (selectedClientId) {
+      try {
+        await deleteClient(selectedClientId);
+        removeClient(selectedClientId);
+      } catch (error) {
+        console.error("Error removing client:", error);
+      }
     }
     setIsRemoving(false);
   };
@@ -83,7 +113,7 @@ export const ClientsPage: React.FC = () => {
 
   return (
     <>
-      <div className="flex flex-col md:flex-row justify-between items-center mb-4 ">
+      <div className="flex flex-col md:flex-row justify-between items-center mb-4">
         <h1 className="text-md md:text-md">
           <span className="font-bold">{totalClients}</span> Clientes
           encontrados:
@@ -133,7 +163,11 @@ export const ClientsPage: React.FC = () => {
         <EditClientModal
           client={
             isEditing
-              ? clients[selectedClientIndex!]
+              ? clients.find((client) => client.id === selectedClientId) || {
+                  name: "",
+                  salary: "",
+                  company: "",
+                }
               : { name: "", salary: "", company: "" }
           }
           onClose={() => {
@@ -144,9 +178,9 @@ export const ClientsPage: React.FC = () => {
         />
       )}
 
-      {isRemoving && selectedClientIndex !== null && (
+      {isRemoving && selectedClientId && (
         <RemoveClientModal
-          client={clients[selectedClientIndex!]}
+          client={clients.find((client) => client.id === selectedClientId)!}
           onClose={() => setIsRemoving(false)}
           onConfirm={confirmRemove}
         />

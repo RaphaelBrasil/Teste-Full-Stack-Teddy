@@ -22,6 +22,11 @@ export class ClientsService {
     return this.clientsRepository.save(client);
   }
 
+  async update(id: string, client: Partial<Client>): Promise<Client> {
+    await this.clientsRepository.update(id, client);
+    return this.findOne(id);
+  }
+
   async remove(id: string): Promise<void> {
     await this.clientsRepository.delete(id);
   }

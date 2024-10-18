@@ -6,6 +6,11 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  app.enableCors({
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  });
+
   const config = new DocumentBuilder()
     .setTitle('Teddy Client API')
     .setDescription('API for managing clients')

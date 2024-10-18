@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Put,
+  Delete,
+  Body,
+  Param,
+} from '@nestjs/common';
 import { ClientsService } from './clients.service';
 import { Client } from './client.entity';
 
@@ -11,9 +19,22 @@ export class ClientsController {
     return this.clientsService.findAll();
   }
 
+  @Get(':id')
+  findOne(@Param('id') id: string): Promise<Client> {
+    return this.clientsService.findOne(id);
+  }
+
   @Post()
   create(@Body() client: Client): Promise<Client> {
     return this.clientsService.create(client);
+  }
+
+  @Put(':id')
+  update(
+    @Param('id') id: string,
+    @Body() client: Partial<Client>,
+  ): Promise<Client> {
+    return this.clientsService.update(id, client);
   }
 
   @Delete(':id')
