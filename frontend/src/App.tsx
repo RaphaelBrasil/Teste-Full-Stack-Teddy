@@ -1,8 +1,11 @@
-import React, { Suspense } from "react";
+import React from "react";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import Layout from "./components/Layout";
 import { ClientsProvider } from "./context/ClientsContext";
 import { UserProvider } from "./context/UserContext";
+import ClientsPage from "./pages/ClientsPage";
+import SelectedClientsPage from "./pages/SelectedClientsPage";
+import WelcomePage from "./pages/WelcomePage";
 
 const App: React.FC = () => {
   const location = useLocation();
@@ -10,33 +13,23 @@ const App: React.FC = () => {
   const noLayoutRoutes = ["/welcome"];
   const isNoLayoutRoute = noLayoutRoutes.includes(location.pathname);
 
-  const ClientsPage = React.lazy(() => import("./pages/ClientsPage"));
-  const SelectedClientsPage = React.lazy(
-    () => import("./pages/SelectedClientsPage")
-  );
-  const WelcomePage = React.lazy(() => import("./pages/WelcomePage"));
-
   return (
     <UserProvider>
       <ClientsProvider>
         {!isNoLayoutRoute ? (
           <Layout>
-            <Suspense fallback={<div>Loading...</div>}>
-              <Routes location={location} key={location.key}>
-                <Route path="/" element={<ClientsPage />} />
-                <Route
-                  path="/selected-clients"
-                  element={<SelectedClientsPage />}
-                />
-              </Routes>
-            </Suspense>
+            <Routes location={location} key={location.key}>
+              <Route path="/" element={<ClientsPage />} />
+              <Route
+                path="/selected-clients"
+                element={<SelectedClientsPage />}
+              />
+            </Routes>
           </Layout>
         ) : (
-          <Suspense fallback={<div>Loading...</div>}>
-            <Routes location={location} key={location.key}>
-              <Route path="/welcome" element={<WelcomePage />} />
-            </Routes>
-          </Suspense>
+          <Routes location={location} key={location.key}>
+            <Route path="/welcome" element={<WelcomePage />} />
+          </Routes>
         )}
       </ClientsProvider>
     </UserProvider>
