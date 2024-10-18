@@ -10,8 +10,8 @@ services:
     ports:
       - "4000:4000"
     depends_on:
-      - db
-  db:
+      - postgres
+  postgres:
     image: postgres
     environment:
       POSTGRES_USER: postgres
