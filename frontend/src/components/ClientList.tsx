@@ -6,7 +6,7 @@ interface ClientListProps {
   clients: Client[];
   onEdit?: (id: string) => void;
   onRemove?: (id: string) => void;
-  onToggleSelect?: (client: Client) => void;
+  onToggleSelect?: (clientId: string) => void;
   isSelectPage: boolean;
 }
 
@@ -26,7 +26,7 @@ export const ClientList: React.FC<ClientListProps> = React.memo(
               onEdit={onEdit ? () => onEdit(client.id) : undefined}
               onRemove={onRemove ? () => onRemove(client.id) : undefined}
               onToggleSelect={
-                onToggleSelect ? () => onToggleSelect(client) : undefined
+                onToggleSelect ? () => onToggleSelect(client.id) : undefined
               }
             />
           );

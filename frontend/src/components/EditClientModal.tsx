@@ -2,6 +2,7 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { IconX } from "@tabler/icons-react";
 import { Client } from "../types/clientTypes";
+import { createClient } from "../services/clientService"; // Importar a função createClient
 
 interface EditClientModalProps {
   client: { name: string; salary: string; company: string };
@@ -27,8 +28,13 @@ export const EditClientModal: React.FC<EditClientModalProps> = ({
     },
   });
 
-  const onSubmit = (data: Client) => {
-    onSave(data);
+  const onSubmit = async (data: Client) => {
+    try {
+      const newClient = await createClient(data);
+      onSave(newClient);
+    } catch (error) {
+      console.error("Error saving client:", error);
+    }
   };
 
   return (

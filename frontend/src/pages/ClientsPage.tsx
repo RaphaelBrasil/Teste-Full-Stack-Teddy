@@ -3,7 +3,6 @@ import ClientList from "../components/ClientList";
 import EditClientModal from "../components/EditClientModal";
 import RemoveClientModal from "../components/RemoveClientModal";
 import Pagination from "../components/Pagination";
-import { useClients } from "../context/ClientsContext";
 import { Client } from "../types/clientTypes";
 import {
   createClient,
@@ -13,14 +12,7 @@ import {
 } from "../services/clientService";
 
 export const ClientsPage: React.FC = () => {
-  const {
-    clients,
-    addClient,
-    updateClient: updateClientContext,
-    removeClient,
-    toggleClientSelection,
-  } = useClients();
-
+  const [clients, setClients] = useState<Client[]>([]);
   const [isEditing, setIsEditing] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
   const [isRemoving, setIsRemoving] = useState(false);
@@ -32,21 +24,14 @@ export const ClientsPage: React.FC = () => {
     const fetchClients = async () => {
       try {
         const initialClients = await getClients();
-        initialClients.forEach((client) => {
-          // Adiciona diretamente ao contexto se o cliente não existir
-          if (
-            !clients.some((existingClient) => existingClient.id === client.id)
-          ) {
-            addClient(client);
-          }
-        });
+        setClients(initialClients);
       } catch (error) {
         console.error("Error fetching clients:", error);
       }
     };
 
     fetchClients();
-  }, [addClient, clients]); // Adicione 'clients' para garantir que a verificação ocorra corretamente
+  }, []);
 
   const totalClients = clients.length;
   const totalPages = Math.ceil(totalClients / clientsPerPage);
@@ -64,11 +49,11 @@ export const ClientsPage: React.FC = () => {
     try {
       if (selectedClientId) {
         await updateClient(selectedClientId, updatedClient);
-        updateClientContext(selectedClientId, updatedClient);
+        const updatedClients = await getClients();
+        setClients(updatedClients);
       } else {
-        const newClient = { ...updatedClient };
-        const createdClient = await createClient(newClient);
-        addClient(createdClient);
+        const createdClient = await createClient(updatedClient);
+        setClients((prevClients) => [...prevClients, createdClient]);
       }
     } catch (error) {
       console.error("Error saving client:", error);
@@ -86,7 +71,8 @@ export const ClientsPage: React.FC = () => {
     if (selectedClientId) {
       try {
         await deleteClient(selectedClientId);
-        removeClient(selectedClientId);
+        const updatedClients = await getClients();
+        setClients(updatedClients);
       } catch (error) {
         console.error("Error removing client:", error);
       }
@@ -98,17 +84,30 @@ export const ClientsPage: React.FC = () => {
     setIsAdding(true);
   };
 
-  const handleToggleSelect = (client: Client) => {
-    if (client.id) {
-      toggleClientSelection(client.id);
-    }
-  };
-
   const handleClientsPerPageChange = (
     e: React.ChangeEvent<HTMLSelectElement>
   ) => {
     setClientsPerPage(Number(e.target.value));
     setCurrentPage(1);
+  };
+
+  const handleToggleSelect = async (clientId: string) => {
+    try {
+      // Primeiro, obter o cliente atual para alternar a seleção
+      const clientToUpdate = clients.find((client) => client.id === clientId);
+      if (clientToUpdate) {
+        // Atualizar o backend
+        await updateClient(clientId, {
+          isSelected: !clientToUpdate.isSelected,
+        });
+
+        // Após a atualização no backend, buscar os clientes novamente
+        const updatedClients = await getClients();
+        setClients(updatedClients);
+      }
+    } catch (error) {
+      console.error("Error updating client selection:", error);
+    }
   };
 
   return (
@@ -140,7 +139,7 @@ export const ClientsPage: React.FC = () => {
         clients={currentClients}
         onEdit={handleEdit}
         onRemove={handleRemove}
-        onToggleSelect={handleToggleSelect}
+        onToggleSelect={handleToggleSelect} // Passa a função de alternar seleção
         isSelectPage={false}
       />
 

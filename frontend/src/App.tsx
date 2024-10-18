@@ -1,7 +1,6 @@
 import React from "react";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import Layout from "./components/Layout";
-import { ClientsProvider } from "./context/ClientsContext";
 import { UserProvider } from "./context/UserContext";
 import ClientsPage from "./pages/ClientsPage";
 import SelectedClientsPage from "./pages/SelectedClientsPage";
@@ -15,23 +14,18 @@ const App: React.FC = () => {
 
   return (
     <UserProvider>
-      <ClientsProvider>
-        {!isNoLayoutRoute ? (
-          <Layout>
-            <Routes location={location} key={location.key}>
-              <Route path="/" element={<ClientsPage />} />
-              <Route
-                path="/selected-clients"
-                element={<SelectedClientsPage />}
-              />
-            </Routes>
-          </Layout>
-        ) : (
+      {!isNoLayoutRoute ? (
+        <Layout>
           <Routes location={location} key={location.key}>
-            <Route path="/welcome" element={<WelcomePage />} />
+            <Route path="/" element={<ClientsPage />} />
+            <Route path="/selected-clients" element={<SelectedClientsPage />} />
           </Routes>
-        )}
-      </ClientsProvider>
+        </Layout>
+      ) : (
+        <Routes location={location} key={location.key}>
+          <Route path="/welcome" element={<WelcomePage />} />
+        </Routes>
+      )}
     </UserProvider>
   );
 };

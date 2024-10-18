@@ -1,19 +1,30 @@
 import React, { useState, useEffect } from "react";
-import { useClients } from "../context/ClientsContext";
+import { Client } from "../types/clientTypes";
 import ClientList from "../components/ClientList";
 import RemoveAllSelectedClientsModal from "../components/RemoveAllSelectedClientsModal";
-import { Client } from "../types/clientTypes";
+import { updateClient, getClients } from "../services/clientService";
 
 const SelectedClientsPage: React.FC = () => {
-  const { clients, toggleClientSelection, removeAllSelectedClients } =
-    useClients();
-
+  const [clients, setClients] = useState<Client[]>([]);
   const [selectedClients, setSelectedClients] = useState<Client[]>([]);
   const [isRemoving, setIsRemoving] = useState(false);
 
   useEffect(() => {
+    const fetchClients = async () => {
+      try {
+        const allClients = await getClients();
+        setClients(allClients);
+      } catch (error) {
+        console.error("Error fetching clients:", error);
+      }
+    };
+
+    fetchClients();
+  }, []);
+
+  useEffect(() => {
     const updatedSelectedClients = clients
-      .filter((client) => client.isSelected && client.id)
+      .filter((client) => client.isSelected)
       .map((client) => ({
         id: client.id!,
         name: client.name,
@@ -25,12 +36,36 @@ const SelectedClientsPage: React.FC = () => {
     setSelectedClients(updatedSelectedClients);
   }, [clients]);
 
-  const handleToggleSelect = (client: Client) => {
-    toggleClientSelection(client.id);
+  const handleToggleSelect = async (clientId: string) => {
+    try {
+      const clientToUpdate = clients.find((client) => client.id === clientId);
+      if (clientToUpdate) {
+        await updateClient(clientId, {
+          isSelected: !clientToUpdate.isSelected,
+        });
+        const updatedClients = await getClients();
+        setClients(updatedClients);
+      }
+    } catch (error) {
+      console.error("Error updating client selection:", error);
+    }
   };
 
-  const confirmRemove = () => {
-    removeAllSelectedClients();
+  const confirmRemove = async () => {
+    try {
+      // Atualizar todos os clientes selecionados para isSelect: false
+      await Promise.all(
+        selectedClients.map((client) =>
+          updateClient(client.id, { isSelected: false })
+        )
+      );
+
+      // Atualizar a lista de clientes após a remoção
+      const updatedClients = await getClients();
+      setClients(updatedClients);
+    } catch (error) {
+      console.error("Error clearing selected clients:", error);
+    }
     setIsRemoving(false);
   };
 
@@ -60,7 +95,7 @@ const SelectedClientsPage: React.FC = () => {
 
       <ClientList
         clients={selectedClients}
-        onToggleSelect={handleToggleSelect}
+        onToggleSelect={handleToggleSelect} // Passa a função de alternar seleção
         isSelectPage={true}
       />
 
