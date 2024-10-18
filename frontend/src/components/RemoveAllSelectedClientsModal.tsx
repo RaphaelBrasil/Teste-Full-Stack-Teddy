@@ -18,7 +18,7 @@ export const RemoveAllSelectedClientsModal: React.FC<
         >
           <IconX />
         </button>
-        <h2 className="text-lg font-bold mb-4">Excluir cliente:</h2>
+        <h2 className="text-lg font-bold mb-4">Remover clientes:</h2>
         <p>Você está prestes a remover todos os clientes selecionados</p>
         <div className="flex justify-end mt-4">
           <button

@@ -2,10 +2,10 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { IconX } from "@tabler/icons-react";
 import { Client } from "../types/clientTypes";
-import { createClient } from "../services/clientService"; // Importar a função createClient
+import { createClient, updateClient } from "../services/clientService";
 
 interface EditClientModalProps {
-  client: { name: string; salary: string; company: string };
+  client: Client | Partial<Client>; // Permite que client seja parcial
   onClose: () => void;
   onSave: (client: Client) => void;
 }
@@ -21,17 +21,22 @@ export const EditClientModal: React.FC<EditClientModalProps> = ({
     formState: { errors },
   } = useForm<Client>({
     defaultValues: {
-      name: client.name,
-      salary: client.salary,
-      company: client.company,
-      isSelected: false,
+      name: client.name || "",
+      salary: client.salary || "",
+      company: client.company || "",
+      isSelected: client.isSelected !== undefined ? client.isSelected : false,
     },
   });
 
   const onSubmit = async (data: Client) => {
     try {
-      const newClient = await createClient(data);
-      onSave(newClient);
+      let savedClient;
+      if (client.id) {
+        savedClient = await updateClient(client.id, data); // Atualiza cliente existente
+      } else {
+        savedClient = await createClient(data); // Cria novo cliente
+      }
+      onSave(savedClient);
     } catch (error) {
       console.error("Error saving client:", error);
     }
@@ -47,7 +52,7 @@ export const EditClientModal: React.FC<EditClientModalProps> = ({
           <IconX />
         </button>
         <h2 className="text-lg font-bold mb-4">
-          {client.name ? "Editar cliente:" : "Criar cliente:"}
+          {client.id ? "Editar cliente:" : "Criar cliente:"}
         </h2>
         <form onSubmit={handleSubmit(onSubmit)}>
           <input
@@ -91,7 +96,7 @@ export const EditClientModal: React.FC<EditClientModalProps> = ({
               type="submit"
               className="w-full border bg-orange-500 text-white py-2 px-4 rounded hover:bg-orange-400"
             >
-              {client.name ? "Editar cliente" : "Criar cliente"}
+              {client.id ? "Editar cliente" : "Criar cliente"}
             </button>
           </div>
         </form>

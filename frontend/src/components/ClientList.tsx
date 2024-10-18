@@ -12,9 +12,12 @@ interface ClientListProps {
 
 export const ClientList: React.FC<ClientListProps> = React.memo(
   ({ clients, onEdit, onRemove, onToggleSelect, isSelectPage }) => {
+    // Ordena os clientes por nome antes de mapear
+    const sortedClients = clients.sort((a, b) => a.name.localeCompare(b.name));
+
     return (
       <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        {clients.map((client) => {
+        {sortedClients.map((client) => {
           return (
             <ClientCard
               key={client.id}
