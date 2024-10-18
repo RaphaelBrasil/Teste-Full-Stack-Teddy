@@ -4,18 +4,17 @@ import EditClientModal from "../components/EditClientModal";
 import RemoveClientModal from "../components/RemoveClientModal";
 import Pagination from "../components/Pagination";
 import { useClients } from "../context/ClientsContext";
-import { useSelectedClients } from "../context/SelectedClientsContext";
-
-interface Client {
-  name: string;
-  salary: string;
-  company: string;
-}
+import { v4 as uuidv4 } from "uuid";
+import { Client } from "../types/clientTypes";
 
 export const ClientsPage: React.FC = () => {
-  const { clients, addClient, updateClient, removeClient } = useClients();
-  const { selectedClients, addSelectedClient, removeSelectedClient } =
-    useSelectedClients();
+  const {
+    clients,
+    addClient,
+    updateClient,
+    removeClient,
+    toggleClientSelection,
+  } = useClients();
 
   const [isEditing, setIsEditing] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
@@ -40,10 +39,15 @@ export const ClientsPage: React.FC = () => {
 
   const handleSave = (updatedClient: Client) => {
     if (selectedClientIndex !== null) {
-      updateClient(selectedClientIndex, updatedClient);
+      const existingClient = clients[selectedClientIndex];
+      if (existingClient.id) {
+        updateClient(selectedClientIndex, updatedClient);
+      }
     } else {
-      addClient(updatedClient);
+      const newClient = { ...updatedClient, id: uuidv4(), isSelected: false };
+      addClient(newClient);
     }
+
     setIsEditing(false);
     setIsAdding(false);
   };
@@ -64,15 +68,9 @@ export const ClientsPage: React.FC = () => {
     setIsAdding(true);
   };
 
-  const handleSelectClient = (client: Client) => {
-    if (
-      selectedClients.some(
-        (selectedClient) => selectedClient.name === client.name
-      )
-    ) {
-      removeSelectedClient(client);
-    } else {
-      addSelectedClient(client);
+  const handleToggleSelect = (client: Client) => {
+    if (client.id) {
+      toggleClientSelection(client.id);
     }
   };
 
@@ -87,7 +85,8 @@ export const ClientsPage: React.FC = () => {
     <>
       <div className="flex flex-col md:flex-row justify-between items-center mb-4 ">
         <h1 className="text-md md:text-md">
-          <span className="font-bold">{totalClients}</span> Clientes encontrados
+          <span className="font-bold">{totalClients}</span> Clientes
+          encontrados:
         </h1>
 
         <div className="text-md md:text-md">
@@ -111,8 +110,8 @@ export const ClientsPage: React.FC = () => {
         clients={currentClients}
         onEdit={handleEdit}
         onRemove={handleRemove}
-        onSelect={handleSelectClient}
-        selectedClients={selectedClients}
+        onToggleSelect={handleToggleSelect}
+        isSelectPage={false}
       />
 
       <div className="flex justify-center mt-4">

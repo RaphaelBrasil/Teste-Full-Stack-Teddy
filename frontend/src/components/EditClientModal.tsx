@@ -1,17 +1,12 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { IconX } from "@tabler/icons-react";
+import { Client } from "../types/clientTypes";
 
 interface EditClientModalProps {
   client: { name: string; salary: string; company: string };
   onClose: () => void;
-  onSave: (client: { name: string; salary: string; company: string }) => void;
-}
-
-interface ClientFormInputs {
-  name: string;
-  salary: string;
-  company: string;
+  onSave: (client: Client) => void;
 }
 
 export const EditClientModal: React.FC<EditClientModalProps> = ({
@@ -23,15 +18,16 @@ export const EditClientModal: React.FC<EditClientModalProps> = ({
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<ClientFormInputs>({
+  } = useForm<Client>({
     defaultValues: {
       name: client.name,
       salary: client.salary,
       company: client.company,
+      isSelected: false,
     },
   });
 
-  const onSubmit = (data: ClientFormInputs) => {
+  const onSubmit = (data: Client) => {
     onSave(data);
   };
 

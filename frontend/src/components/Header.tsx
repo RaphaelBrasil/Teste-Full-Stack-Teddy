@@ -63,8 +63,10 @@ export const Header: React.FC = () => {
           </NavLink>
         </nav>
         <div className="hidden md:block text-gray-700">
-          Olá, <span className="font-semibold">{name || "Usuário!"}</span>{" "}
-          {/* Use o nome do contexto ou um padrão */}
+          Olá,{" "}
+          <span className="font-semibold">
+            {name ? `${name}!` : "Usuário!"}
+          </span>{" "}
         </div>
       </header>
 
