@@ -1,27 +1,27 @@
 services:
-  frontend:
-    build: ./frontend
-    ports:
-      - "3000:3000"
-    environment:
-      - VITE_API_URL=http://backend:4000/clients
-    depends_on:
-      - backend
-  backend:
-    build: ./backend
-    ports:
-      - "4000:4000"
-    depends_on:
-      - postgres
-  postgres:
-    image: postgres
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: clients_db
-    ports:
-      - "5432:5432"
-    volumes:
-      - pgdata:/var/lib/postgresql/data
+    frontend:
+        build: ./frontend
+        ports:
+            - "3000:3000"
+        environment:
+            - VITE_API_URL=http://localhost:4000/clients
+        depends_on:
+            - backend
+    backend:
+        build: ./backend
+        ports:
+            - "4000:4000"
+        depends_on:
+            - postgres
+    postgres:
+        image: postgres
+        environment:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: password
+            POSTGRES_DB: clients_db
+        ports:
+            - "5432:5432"
+        volumes:
+            - pgdata:/var/lib/postgresql/data
 volumes:
-  pgdata:
+    pgdata:
