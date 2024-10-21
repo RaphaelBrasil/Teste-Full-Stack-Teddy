@@ -6,13 +6,13 @@ Este sistema permite o gerenciamento de clientes, oferecendo uma interface simpl
 
 ### Funcionalidades
 
--   Tela inicial para inserção do nome do usuário.
--   Tela com a lista de clientes cadastrados, permitindo:
-    -   Cadastro de novos clientes.
-    -   Seleção de clientes.
-    -   Atualização de informações dos clientes.
-    -   Exclusão de clientes.
--   Tela específica para visualização dos clientes selecionados.
+- Tela inicial para inserção do nome do usuário.
+- Tela com a lista de clientes cadastrados, permitindo:
+  - Cadastro de novos clientes.
+  - Seleção de clientes.
+  - Atualização de informações dos clientes.
+  - Exclusão de clientes.
+- Tela específica para visualização dos clientes selecionados.
 
 ## Arquitetura do sistema
 
@@ -22,39 +22,39 @@ O projeto segue uma arquitetura de containers usando **Docker**. Ele está divid
 
 1. **Clone o repositório**:
 
-    ```bash
-    git clone https://github.com/RaphaelBrasil/Teste-Full-Stack-Teddy
-    ```
+   ```bash
+   git clone https://github.com/RaphaelBrasil/Teste-Full-Stack-Teddy
+   ```
 
 2. **Navegue até a raiz do projeto** e suba os containers:
 
-    ```bash
-    cd Teste-Full-Stack-Teddy
-    docker-compose up --build
-    ```
+   ```bash
+   cd Teste-Full-Stack-Teddy
+   docker-compose up --build
+   ```
 
 3. **Acesse o Front-End** no navegador:
 
-    - URL: `http://localhost:3000`
+   - URL: `http://localhost:3000/welcome`
 
 4. **Acesse o Back-End** se necessário:
-    - URL: `http://localhost:4000`
+   - URL: `http://localhost:4000`
 
 ## Tecnologias Utilizadas
 
--   **Frontend**:
+- **Frontend**:
 
-    -   React
-    -   Vite
+  - React
+  - Vite
 
--   **Backend**:
+- **Backend**:
 
-    -   Nest.js
-    -   TypeORM
+  - Nest.js
+  - TypeORM
 
--   **Banco de dados**:
+- **Banco de dados**:
 
-    -   Postgres
+  - Postgres
 
--   **Containerização**:
-    -   Docker
+- **Containerização**:
+  - Docker
